@@ -1,0 +1,107 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ConsoleApp4
+{
+    public class Meteorologi
+    {
+        string path = "D:/meteorologi.txt";
+
+        string[] stroke = File.ReadAllLines("D:/meteorologi.txt");
+
+        int day = 0;
+        int vice = 0;
+        string mounth = " ";
+
+        public void enterAllValues()
+        {
+            Console.Write("Введіть місяць: ");
+            mounth = Console.ReadLine();
+            Console.Write("Введіть кількість днів місяця: ");
+            day = int.Parse(Console.ReadLine());
+
+            int[] dayOfMounth = new int[day];
+
+            double[] temperatureOfDay = new double[day];
+
+            int[] vice = new int[day];
+
+            double maxTemperatureOfMounth = temperatureOfDay[0];
+
+            if(stroke.Length == 0)
+            {
+                if (mounth != " ")
+                {
+                    for(int i = 0; i < dayOfMounth.Length; i++)
+                    {
+                        Console.Write($"\nВведіть температуру {i} дня: \t");
+                        temperatureOfDay[i] = double.Parse(Console.ReadLine());
+
+                        Console.Write($"\nВведіть тиск {i} дня: \t");
+                        vice[i] = int.Parse(Console.ReadLine());
+
+                        using (StreamWriter writer = new StreamWriter(path, true))
+                        {
+                            writer.WriteLineAsync($"Місяць:{mounth}/День місяця:{i}/Температура: {temperatureOfDay[i]}-Градусів цельсія!/Тиск: {vice[i]}");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (mounth != " ")
+                {
+                    using (StreamWriter writer = new StreamWriter(path, true))
+                    {
+                        writer.WriteLineAsync("----------------------------------------------------------------------------------------------------------------------------");
+                    }
+                    for (int i = 1; i < dayOfMounth.Length; i++)
+                    {
+                        Console.Write($"\nВведіть температуру {i} дня: \t");
+                        temperatureOfDay[i] = double.Parse(Console.ReadLine());
+
+                        Console.Write($"\nВведіть тиск {i} дня: \t");
+                        vice[i] = int.Parse(Console.ReadLine());
+
+                        using (StreamWriter writer = new StreamWriter(path, true))
+                        {
+                            writer.WriteLineAsync($"Місяць:{mounth}/День місяця:{i}/Температура: {temperatureOfDay[i]}-Градусів цельсія!/Тиск: {vice[i]}");
+                        }
+                    }
+
+                    for (int i = 0; i < temperatureOfDay.Length; i++)
+                    {
+                        if (temperatureOfDay[i] > maxTemperatureOfMounth)
+                        {
+                            maxTemperatureOfMounth = temperatureOfDay[i];
+                        }
+                    }
+                    using (StreamWriter write = new StreamWriter(path, true))
+                    {
+                        write.WriteLineAsync($"Максимальна температура за місяць: {maxTemperatureOfMounth}");
+                    }
+                }
+            }
+                
+        }
+
+        public void readFromFile()
+        {
+            if(stroke.Length == 0)
+            {
+                Console.WriteLine($"Файл не містить інформації!!!");
+            }
+            else
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string text = reader.ReadToEnd();
+                    Console.WriteLine(text);
+                }
+            }
+            
+        }
+    }
+}
